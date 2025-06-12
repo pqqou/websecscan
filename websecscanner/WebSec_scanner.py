@@ -4,7 +4,7 @@ from Features import features_config, features_export, features_severity, featur
 def main():
     import argparse
     parser = argparse.ArgumentParser(description="Simple Web Security Scanner")
-    parser.add_argument("url", help="Target website URL (e.g., https://example.com)")
+    parser.add_argument("url", nargs="?", help="Target website URL (e.g., https://example.com)")
     parser.add_argument("--headers", action="store_true", help="Only perform header check")
     parser.add_argument("--cookies", action="store_true", help="Only perform cookie check")
     parser.add_argument("--paths", action="store_true", help="Only perform path check")
@@ -28,7 +28,33 @@ def main():
     parser.add_argument('--api', action='store_true', help='Check for API security issues')
     parser.add_argument('--session-cookie', type=str, help='Session cookie for authenticated scans')
     parser.add_argument('--metrics', action='store_true', help='Show performance metrics')
+    parser.add_argument('--uninstall', action='store_true', help='Uninstall WebSecScanner and remove all files (pipx or venv)')
     args = parser.parse_args()
+
+    # Uninstall feature
+    if args.uninstall:
+        import os, sys, shutil
+        print("[!] Uninstalling WebSecScanner...")
+        # Detect pipx uninstall
+        pipx_home = os.environ.get('PIPX_HOME')
+        pipx_bin = shutil.which('pipx')
+        if pipx_home or 'pipx' in sys.executable or pipx_bin:
+            print("[+] Detected pipx installation. Please run the following command to uninstall:")
+            print("    pipx uninstall websecscanner")
+        else:
+            # Try to remove venv if present
+            venv_path = os.path.join(os.getcwd(), '.venv')
+            if os.path.isdir(venv_path):
+                print(f"[+] Removing virtual environment at {venv_path}")
+                shutil.rmtree(venv_path)
+                print("[+] Virtual environment removed.")
+            else:
+                print("[!] No virtual environment found. Please uninstall manually if needed.")
+        print("[!] Uninstallation complete. Exiting.")
+        sys.exit(0)
+
+    if not args.url:
+        parser.error("the following arguments are required: url")
     url = args.url
 
     config = features_config.load_config(args.config) if args.config else {}

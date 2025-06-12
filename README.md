@@ -20,25 +20,55 @@ A simple, modular web security scanner CLI tool for quick security and privacy c
 ### Requirements
 - Python 3.8+
 
-### CLI Tool Installation
+### CLI Tool Installation (Recommended)
 
-1. Clone or download the repository:
+1. Install [pipx](https://pypa.github.io/pipx/):
    ```pwsh
-   git clone https://github.com/pqqou/websecscan.git
-   cd websecscan
+   python -m pip install --user pipx
+   python -m pipx ensurepath
+   # Restart your terminal if needed
    ```
-2. Install (recommended in a venv):
+2. Install WebSecScanner globally with pipx:
    ```pwsh
-   python -m venv .venv
-   .venv\Scripts\Activate.ps1
-   pip install .
+   pipx install .
    ```
-   (For development: `pip install -e .`)
-
 3. Now the `websecscan` command is available everywhere:
    ```pwsh
    websecscan https://example.com
    ```
+
+#### Alternative: Development in venv
+
+1. Create and activate a virtual environment:
+   ```pwsh
+   python -m venv .venv
+   .venv\Scripts\Activate.ps1
+   pip install -e .
+   ```
+2. Then use as above:
+   ```pwsh
+   websecscan https://example.com
+   ```
+
+> **Note:**
+> If the command is not found, make sure you are either using pipx or have activated your virtual environment.
+
+## Uninstallation
+
+### If installed with pipx (recommended):
+```pwsh
+pipx uninstall websecscanner
+```
+
+### If installed in a virtual environment:
+1. Deactivate and remove the virtual environment folder:
+   ```pwsh
+   deactivate
+   Remove-Item -Recurse -Force .venv
+   ```
+
+> **Note:**
+> This will remove the tool and all its dependencies from your system (if using pipx) or from your project folder (if using a venv).
 
 ## Usage
 
